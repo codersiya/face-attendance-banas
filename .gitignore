@@ -1,0 +1,53 @@
+# ---------------------------------------------------------------------------
+# Environment / secrets
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ---------------------------------------------------------------------------
+# Backend (Python / FastAPI)
+# ---------------------------------------------------------------------------
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/.pytest_cache/
+backend/*.egg-info/
+backend/dist/
+backend/build/
+
+# Alembic - keep migration scripts, ignore local db state / cache
+backend/alembic/versions/__pycache__/
+
+# ---------------------------------------------------------------------------
+# Frontend (Node / Vite / React)
+# ---------------------------------------------------------------------------
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# ---------------------------------------------------------------------------
+# Docker
+# ---------------------------------------------------------------------------
+*.log
+
+# ---------------------------------------------------------------------------
+# Editor / OS noise
+# ---------------------------------------------------------------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ---------------------------------------------------------------------------
+# Uploaded / generated data (if ever written to disk locally)
+# ---------------------------------------------------------------------------
+backend/uploads/
+backend/tmp/

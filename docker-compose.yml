@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: attendance_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: attendance_user
+      POSTGRES_PASSWORD: attendance_pass
+      POSTGRES_DB: attendance_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - attendance_pg_data:/var/lib/postgresql/data
+
+volumes:
+  attendance_pg_data:
