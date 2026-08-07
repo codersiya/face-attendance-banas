@@ -34,30 +34,33 @@ WORKDIR /build
 # Create a robust cmake wrapper to forcefully override any parallel build (-j) flags 
 # that dlib's setup.py tries to use. This guarantees it will only use 1 core and 
 # avoid the 8GB+ OOM errors on Render.
-RUN echo '#!/bin/bash\n\
-is_build=0\n\
-new_args=()\n\
-for arg in "$@"; do\n\
-    if [[ $arg == "--build" ]]; then\n\
-        is_build=1\n\
-    fi\n\
-    if [[ $arg == -j* ]]; then\n\
-        continue\n\
-    fi\n\
-    new_args+=("$arg")\n\
-done\n\
-if [[ $is_build -eq 1 ]]; then\n\
-    new_args+=("-j1")\n\
-fi\n\
-exec /usr/bin/cmake "${new_args[@]}"\n\
-' > /usr/local/bin/cmake && chmod +x /usr/local/bin/cmake
+RUN cat << 'EOF' > /usr/local/bin/cmake
+#!/bin/bash
+is_build=0
+new_args=()
+for arg in "$@"; do
+    if [[ $arg == "--build" ]]; then
+        is_build=1
+    fi
+    if [[ $arg == -j* ]]; then
+        continue
+    fi
+    new_args+=("$arg")
+done
+if [[ $is_build -eq 1 ]]; then
+    new_args+=("-j1")
+fi
+exec /usr/bin/cmake "${new_args[@]}"
+EOF
+RUN chmod +x /usr/local/bin/cmake
 
 COPY backend/requirements.txt .
 # Remove Windows-specific dlib-binary and replace with standard dlib
 RUN sed -i 's/dlib-binary==19.24.1/dlib==19.24.1/' requirements.txt
 
 # We must install setuptools and wheel first when using --no-build-isolation
-RUN pip install --no-cache-dir setuptools wheel cmake
+# Do NOT install cmake via pip as it would overwrite our wrapper
+RUN pip install --no-cache-dir setuptools wheel
 # Install dlib explicitly with --no-build-isolation. This prevents pip from downloading
 # a fresh copy of cmake, forcing it to use our wrapper in /usr/local/bin/cmake
 RUN pip install --no-cache-dir --prefix=/install --no-build-isolation dlib==19.24.1

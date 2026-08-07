@@ -122,10 +122,22 @@ real device testing.
    `embedding_front`, `embedding_left`, `embedding_right` on that employee's
    row, setting `is_enrolled = true`.
 
+## Deploying to Render
+
+This project includes a `render.yaml` and a `Dockerfile` for seamless deployment to [Render](https://render.com). 
+
+1. Push your code (including `render.yaml`, `Dockerfile`, `nginx.conf`, and `supervisord.conf`) to a GitHub repository.
+2. Go to your Render Dashboard and click **New +** -> **Blueprint**.
+3. Connect your GitHub repository. Render will automatically read the `render.yaml` file.
+4. Render will provision a managed PostgreSQL database and a Docker Web Service that runs both the frontend and backend.
+5. Click **Apply** to start the build.
+
+**Note on Memory (OOM) Errors:** Compiling the `dlib` library requires significant memory. The included `Dockerfile` specifically forces a single-threaded compilation (`-j1`) via a `cmake` wrapper to prevent Out-Of-Memory errors on Render's build servers. The build process may take 5-10 minutes, but once built, the application will comfortably run on a 2GB instance (or even a free tier instance depending on traffic).
+
 ## Production notes
 
 - Put the API behind HTTPS (required for camera access on non-localhost
-  origins) and restrict `ALLOWED_ORIGINS` to your real frontend domain.
+  origins) and restrict `ALLOWED_ORIGINS` to your real frontend domain. (Render provides HTTPS out of the box).
 - Add authentication/authorization (e.g. JWT) in front of the `employees`
   router before exposing this beyond a trusted admin network — enrollment
   endpoints are unauthenticated in this scaffold.
