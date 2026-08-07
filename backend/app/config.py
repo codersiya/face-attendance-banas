@@ -40,8 +40,6 @@
 
 
 
-
-
 """
 Centralized application configuration.
 Reads values from environment variables / .env file.
@@ -72,7 +70,11 @@ class Settings(BaseSettings):
     FACE_FRONT_MAX_OFFSET: float = 0.12
     FACE_PROFILE_MIN_OFFSET: float = 0.22
 
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",  # ignore .env keys not declared as fields (e.g. POSTGRES_*, VITE_*)
+    )
 
     @property
     def allowed_origins_list(self) -> list[str]:
