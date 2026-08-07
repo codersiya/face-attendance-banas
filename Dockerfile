@@ -35,14 +35,20 @@ WORKDIR /build
 # that dlib's setup.py tries to use. This guarantees it will only use 1 core and 
 # avoid the 8GB+ OOM errors on Render.
 RUN echo '#!/bin/bash\n\
+is_build=0\n\
 new_args=()\n\
 for arg in "$@"; do\n\
+    if [[ $arg == "--build" ]]; then\n\
+        is_build=1\n\
+    fi\n\
     if [[ $arg == -j* ]]; then\n\
         continue\n\
     fi\n\
     new_args+=("$arg")\n\
 done\n\
-new_args+=("-j1")\n\
+if [[ $is_build -eq 1 ]]; then\n\
+    new_args+=("-j1")\n\
+fi\n\
 exec /usr/bin/cmake "${new_args[@]}"\n\
 ' > /usr/local/bin/cmake && chmod +x /usr/local/bin/cmake
 
