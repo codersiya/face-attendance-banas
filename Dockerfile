@@ -70,6 +70,6 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
 # 80 = frontend (and API proxy), 8000 = backend direct access (e.g. /docs)
-EXPOSE 80 8000
+EXPOSE 80
 
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

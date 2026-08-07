@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: face-attendance
+    env: docker
+    region: ohio # Change as needed
+    plan: free # Change to starter/standard if needed
+    envVars:
+      - key: PORT
+        value: "80"
+      - key: ENVIRONMENT
+        value: "production"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: face-attendance-db
+          property: connectionString
+
+databases:
+  - name: face-attendance-db
+    databaseName: face_attendance
+    user: face_admin
+    region: ohio
+    plan: free
