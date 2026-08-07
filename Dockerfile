@@ -55,8 +55,9 @@ EOF
 RUN chmod +x /usr/local/bin/cmake
 
 COPY backend/requirements.txt .
-# Remove Windows-specific dlib-binary and replace with standard dlib
-RUN sed -i 's/dlib-binary==19.24.1/dlib==19.24.1/' requirements.txt
+# Remove dlib entirely from requirements.txt because we install it separately 
+# using our special single-threaded, isolated cmake wrapper.
+RUN sed -i '/dlib/d' requirements.txt
 
 # We must install setuptools and wheel first when using --no-build-isolation
 # Do NOT install cmake via pip as it would overwrite our wrapper
