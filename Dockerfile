@@ -33,7 +33,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /build
 
 COPY backend/requirements.txt .
+# Remove Windows-specific dlib-binary and replace with standard dlib for Linux
+RUN sed -i 's/dlib-binary==19.24.1/dlib==19.24.1/' requirements.txt
 RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+RUN pip install --no-cache-dir --prefix=/install face_recognition==1.3.0
 
 
 # ---------- Stage 3: Final runtime image ----------
