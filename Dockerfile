@@ -56,8 +56,14 @@ COPY backend/requirements.txt .
 # Remove Windows-specific dlib-binary and replace with standard dlib
 RUN sed -i 's/dlib-binary==19.24.1/dlib==19.24.1/' requirements.txt
 
+# We must install setuptools and wheel first when using --no-build-isolation
+RUN pip install --no-cache-dir setuptools wheel cmake
+# Install dlib explicitly with --no-build-isolation. This prevents pip from downloading
+# a fresh copy of cmake, forcing it to use our wrapper in /usr/local/bin/cmake
+RUN pip install --no-cache-dir --prefix=/install --no-build-isolation dlib==19.24.1
+
 RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
-RUN pip install --no-cache-dir --prefix=/install face_recognition==1.3.0
+RUN pip install --no-cache-dir --prefix=/install --no-deps face_recognition==1.3.0
 
 # ---------- Stage 3: Final runtime image ----------
 FROM python:3.11-slim AS runtime
