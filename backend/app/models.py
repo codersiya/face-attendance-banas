@@ -22,7 +22,7 @@ EMBEDDING_DIM = 128
 
 
 class Employee(Base):
-    __tablename__ = "employees"
+    __tablename__ = "employees_banas"
 
     emp_id: Mapped[str] = mapped_column(String(30), primary_key=True)
     emp_code: Mapped[str] = mapped_column(String(30), unique=True, nullable=False, index=True)

@@ -5,7 +5,7 @@
 -- No pgvector extension is used here. Embeddings are stored using plain
 -- native PostgreSQL arrays (double precision[]) - works on any stock
 -- PostgreSQL instance, no extension install required.
-CREATE TABLE IF NOT EXISTS employees (
+CREATE TABLE IF NOT EXISTS employees_banas (
     emp_id              VARCHAR(30) PRIMARY KEY,        -- user-entered string ID, primary key
     emp_code            VARCHAR(30) UNIQUE NOT NULL,     -- user-entered code
     employee_name       VARCHAR(150) NOT NULL,
