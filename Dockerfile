@@ -17,7 +17,7 @@ RUN npm run build
 
 
 # ---------- Stage 2: Backend dependency build ----------
-FROM python:3.11-slim AS backend-builder
+FROM python:3.11-slim-bookworm AS backend-builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
@@ -35,7 +35,7 @@ RUN pip install --no-cache-dir --prefix=/install --no-deps face_recognition==1.3
 
 
 # ---------- Stage 3: Final runtime image ----------
-FROM python:3.11-slim AS runtime
+FROM python:3.11-slim-bookworm AS runtime
 
 # Install python3-dlib via apt to get the PRECOMPILED dlib! No compilation needed.
 # This prevents the Out of Memory error on Render completely.
