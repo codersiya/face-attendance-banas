@@ -35,6 +35,11 @@ WORKDIR /build
 COPY backend/requirements.txt .
 # Remove Windows-specific dlib-binary and replace with standard dlib for Linux
 RUN sed -i 's/dlib-binary==19.24.1/dlib==19.24.1/' requirements.txt
+
+# Limit build jobs to 1 to prevent OOM (Out of Memory) errors on Render
+ENV MAX_JOBS=1
+ENV CMAKE_BUILD_PARALLEL_LEVEL=1
+
 RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 RUN pip install --no-cache-dir --prefix=/install face_recognition==1.3.0
 
